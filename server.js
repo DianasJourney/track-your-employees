@@ -4,7 +4,7 @@ const db = require('./db/connection');
 // connecting db to server after it starts
 db.connect(err => {
   if (err) throw err
-  console.log('Database connected.')
+  console.log('You are now connected to the database!')
   all_employees()
 });
 
@@ -13,7 +13,6 @@ let all_employees = function () {
   inquirer
     .prompt([
       {
-        // Begin Command Line
         type: 'list',
         name: 'prompt',
         message: 'Select what you want to do.',
@@ -28,3 +27,5 @@ let all_employees = function () {
           'Quit'
         ]
       }
+        ])
+    
