@@ -1,4 +1,4 @@
--- Inserts names of departments into department table
+-- inserting values as placeholders
 INSERT INTO department
   (name)
 VALUES
@@ -7,7 +7,6 @@ VALUES
   ('Finance'),
   ('Baker');
 
--- Inserts roles of employee into role table
 INSERT INTO role
   (title, salary, department_id)
 VALUES
@@ -16,7 +15,6 @@ VALUES
   ('Accountant', 165678, 3),
   ('Pastry Chef', 723555, 4);
 
--- Inserts employee information into employee table
 INSERT INTO employee
   (first_name, last_name, role_id, manager_id)
 VALUES

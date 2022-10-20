@@ -2,7 +2,7 @@ DROP DATABASE IF EXISTS all_employees_db;
 CREATE DATABASE all_employees_db;
 USE all_employees_db;
 
-
+--creating tables for all sections in the all employees database
 CREATE TABLE department (
     id INT AUTO_INCREMENT PRIMARY KEY,
     name VARCHAR(30)
