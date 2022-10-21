@@ -7,6 +7,7 @@ VALUES
   ('Finance'),
   ('Legal');
 
+
 INSERT INTO role
   (title, salary, department_id)
 VALUES
@@ -18,7 +19,7 @@ VALUES
 INSERT INTO employee
   (first_name, last_name, role_id, manager_id)
 VALUES
-  ('Eric', 'Xia', 1, 2),
-  ('Billy', 'Nguy', 2, 8),
-  ('Steven', 'Vu', 3, 1),
-  ('Hui', 'Cong', 4, 9);
+  ('Eric', 'Xia', 1, 1),
+  ('Billy', 'Nguy', 2, 1),
+  ('Steven', 'Vu', 3, 2),
+  ('Hui', 'Cong', 4, 2);

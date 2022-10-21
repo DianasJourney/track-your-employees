@@ -2,8 +2,6 @@
 const mysql = require('mysql2')
 require('dotenv').config()
 
-
-
 const db = mysql.createConnection({
   // user info for sql
   host: 'localhost',
