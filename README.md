@@ -24,6 +24,9 @@ The following technologies needed will be:
 ## Tests
 When using this application users will need to run the command `node server.js` this will then prompt a series of list and users will be able to select and view what they choose. Demonstration of the application is presented below for further guidance.
 
+[Employee Tracker Demo.webm](https://user-images.githubusercontent.com/109758045/197096173-47743ce1-33d1-491a-a375-d6ee012241b9.webm)
+
+
 ## UserStory
 ---
 - AS A business owner
