@@ -162,7 +162,10 @@ let all_employees = function () {
                     for (let i = 0; i < result.length; i++) {
                       let managerName =
                         result[i].first_name + ' ' + result[i].last_name
-                      if (!managers.includes(managerName)) {
+                      if (
+                        result[i].first_name !== null &&
+                        !managers.includes(managerName)
+                      ) {
                         managers.push(managerName)
                       }
                     }
@@ -174,16 +177,13 @@ let all_employees = function () {
               ])
               .then(answers => {
                 let role = result.find(r => r.title === answers.role)
-                let manager = result.find(r => r.first_name + ' ' + r.last_name === answers.manager)
+                let manager = result.find(
+                  r => r.first_name + ' ' + r.last_name === answers.manager
+                )
                 let managerId = manager ? manager.employeeId : undefined
                 db.query(
                   `INSERT INTO employee (first_name, last_name, role_id, manager_id) VALUES (?, ?, ?, ?)`,
-                  [
-                    answers.firstName,
-                    answers.lastName,
-                    role.roleId,
-                    managerId
-                  ],
+                  [answers.firstName, answers.lastName, role.roleId, managerId],
                   (err, result) => {
                     if (err) throw err
                     console.log(
@@ -196,59 +196,68 @@ let all_employees = function () {
           }
         )
       } else if (answers.prompt === 'Update An Employee Role') {
-        db.query(`SELECT * FROM employee as e, role`, (err, result) => {
-          if (err) throw err
+        db.query(
+          `SELECT employee.id as employeeId, employee.* , role.id as roleId, role.*
+                  FROM employee
+                  JOIN role
+                  ON employee.role_id = role.id;`,
+          (err, result) => {
+            if (err) throw err
 
-          inquirer
-            .prompt([
-              {
-                // this section updates an employee
-                type: 'list',
-                name: 'employee',
-                message: 'Which employees role do you want to update?',
-                choices: () => {
-                  let employees = []
-                  for (let i = 0; i < result.length; i++) {
-                    if (!employees.includes(result[i].last_name)) {
-                      employees.push(result[i].last_name)
+            inquirer
+              .prompt([
+                {
+                  // this section updates an employee
+                  type: 'list',
+                  name: 'employee',
+                  message: 'Which employees role do you want to update?',
+                  choices: () => {
+                    let employees = []
+                    for (let i = 0; i < result.length; i++) {
+                      if (!employees.includes(result[i].last_name)) {
+                        employees.push(result[i].last_name)
+                      }
                     }
+                    return employees
                   }
-                  return employees
-                }
-              },
-              {
-                // updates the new role
-                type: 'list',
-                name: 'role',
-                message: 'What is their new role?',
-                choices: () => {
-                  let roles = []
-                  for (let i = 0; i < result.length; i++) {
-                    if (!roles.includes(result[i].title)) {
-                      roles.push(result[i].title)
+                },
+                {
+                  // updates the new role
+                  type: 'list',
+                  name: 'role',
+                  message: 'What is their new role?',
+                  choices: () => {
+                    let roles = []
+                    for (let i = 0; i < result.length; i++) {
+                      if (!roles.includes(result[i].title)) {
+                        roles.push(result[i].title)
+                      }
                     }
+                    return roles
                   }
-                  return roles
                 }
-              }
-            ])
-            .then(answers => {
-              let last_name = result.find(r => r.last_name === answers.employee)
-              let role_id = result.find(r => r.title === answers.role)
+              ])
+              .then(answers => {
+                let employeeToUpdate = result.find(
+                  r => r.last_name === answers.employee
+                )
+                let newRole = result.find(
+                  r => r.title === answers.role
+                )
 
-              db.query(
-                `UPDATE employee SET ? WHERE ?`,
-                [{ role_id }, { last_name }],
-                (err, result) => {
-                  if (err) throw err
-                  console.log(
-                    `Updated ${answers.employee} role to the database.`
-                  )
-                  all_employees()
-                }
-              )
-            })
-        })
+                db.query(
+                  `UPDATE employee SET role_id = ${newRole.roleId} WHERE last_name = '${employeeToUpdate.last_name}'`,
+                  (err, result) => {
+                    if (err) throw err
+                    console.log(
+                      `Updated ${answers.employee} role to the database.`
+                    )
+                    all_employees()
+                  }
+                )
+              })
+          }
+        )
         //ends the database
       } else if (answers.prompt === 'Quit') {
         db.end()
